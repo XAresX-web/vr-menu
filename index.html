@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menú 3D Dinámico</title>
+
+    <!-- Librería Model-Viewer -->
+    <script
+      type="module"
+      src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"
+    ></script>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: #39ff14;
+        text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
+      }
+
+      model-viewer {
+        width: 100%;
+        max-width: 800px;
+        height: 500px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        margin: 20px 0;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Carrusel */
+      .carousel {
+        display: flex;
+        overflow-x: auto;
+        gap: 12px;
+        padding: 10px;
+        max-width: 95%;
+        scrollbar-width: none;
+      }
+      .carousel::-webkit-scrollbar {
+        display: none;
+      }
+
+      .thumbnail {
+        flex: 0 0 auto;
+        width: 100px;
+        height: 100px;
+        border-radius: 12px;
+        cursor: pointer;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+      }
+
+      .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .thumbnail.active {
+        border-color: #39ff14;
+        transform: scale(1.05);
+      }
+
+      /* Caja de información */
+      .info-box {
+        margin-top: 20px;
+        padding: 20px;
+        max-width: 800px;
+        width: 100%;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      }
+
+      .info-box h2 {
+        margin: 0 0 10px;
+        color: #39ff14;
+      }
+
+      .info-box p {
+        margin: 6px 0;
+        font-size: 0.95rem;
+      }
+
+      .info-box ul {
+        padding-left: 20px;
+        margin: 8px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🍽 Menú Interactivo 3D</h1>
+
+    <!-- Viewer principal -->
+    <model-viewer
+      id="mainViewer"
+      src=""
+      ios-src=""
+      alt="Modelo 3D"
+      ar
+      ar-modes="scene-viewer quick-look webxr"
+      camera-controls
+      auto-rotate
+      shadow-intensity="1"
+    >
+    </model-viewer>
+
+    <!-- Carrusel dinámico -->
+    <div class="carousel" id="carousel"></div>
+
+    <!-- Info dinámica -->
+    <div class="info-box" id="infoBox">
+      <h2>Selecciona un platillo</h2>
+      <p>Aquí verás la información nutricional y el precio.</p>
+    </div>
+
+    <script>
+      const viewer = document.getElementById("mainViewer");
+      const carousel = document.getElementById("carousel");
+      const infoBox = document.getElementById("infoBox");
+
+      let platillos = {};
+
+      // Cargar datos desde JSON externo
+      fetch("data.json")
+        .then((res) => res.json())
+        .then((data) => {
+          platillos = data;
+          cargarCarrusel(data);
+          mostrarPlatillo(Object.keys(data)[0]); // Mostrar primero
+        });
+
+      function cargarCarrusel(data) {
+        carousel.innerHTML = "";
+        Object.entries(data).forEach(([id, item], index) => {
+          const thumb = document.createElement("div");
+          thumb.classList.add("thumbnail");
+          if (index === 0) thumb.classList.add("active");
+          thumb.dataset.id = id;
+          thumb.innerHTML = `<img src="${item.thumbnail}" alt="${item.nombre}"/>`;
+          carousel.appendChild(thumb);
+
+          thumb.addEventListener("click", () => {
+            document
+              .querySelectorAll(".thumbnail")
+              .forEach((t) => t.classList.remove("active"));
+            thumb.classList.add("active");
+            mostrarPlatillo(id);
+          });
+        });
+      }
+
+      function mostrarPlatillo(id) {
+        const item = platillos[id];
+
+        // Actualizar modelo
+        viewer.setAttribute("src", item.src);
+        viewer.setAttribute("ios-src", item.ios);
+
+        // Actualizar info
+        infoBox.innerHTML = `
+          <h2>${item.nombre}</h2>
+          <p><strong>Calorías:</strong> ${item.calorias}</p>
+          <p><strong>Precio:</strong> ${item.precio}</p>
+          <p><strong>Ingredientes:</strong></p>
+          <ul>${item.ingredientes.map((i) => `<li>${i}</li>`).join("")}</ul>
+        `;
+      }
+    </script>
+  </body>
+</html>
