@@ -4,6 +4,7 @@
     "ios": "models/hamburguesa.usdz",
     "thumbnail": "thumbnails/hamburguesa.jpg",
     "nombre": "🍔 Hamburguesa",
+    "categoria": "Platillo principal",
     "calorias": "850 kcal",
     "precio": "$8.99",
     "ingredientes": [
@@ -12,13 +13,15 @@
       "Queso cheddar",
       "Lechuga",
       "Tomate"
-    ]
+    ],
+    "descripcion": "Una jugosa hamburguesa preparada con ingredientes frescos y pan artesanal."
   },
   "pizza": {
     "src": "models/pizza.glb",
     "ios": "models/pizza.usdz",
     "thumbnail": "thumbnails/pizza.jpg",
     "nombre": "🍕 Pizza",
+    "categoria": "Platillo principal",
     "calorias": "1200 kcal",
     "precio": "$12.50",
     "ingredientes": [
@@ -26,24 +29,29 @@
       "Salsa de tomate",
       "Queso mozzarella",
       "Pepperoni"
-    ]
+    ],
+    "descripcion": "Pizza tradicional con masa fina y extra queso mozzarella."
   },
   "dona": {
     "src": "models/dona.glb",
     "ios": "models/dona.usdz",
     "thumbnail": "thumbnails/dona.jpg",
     "nombre": "🍩 Dona",
+    "categoria": "Postre",
     "calorias": "450 kcal",
     "precio": "$3.99",
-    "ingredientes": ["Masa dulce", "Azúcar glas", "Relleno de chocolate"]
+    "ingredientes": ["Masa dulce", "Azúcar glas", "Relleno de chocolate"],
+    "descripcion": "Dulce esponjoso relleno de chocolate, perfecto para acompañar con café."
   },
   "coca": {
     "src": "models/coca.glb",
     "ios": "models/coca.usdz",
     "thumbnail": "thumbnails/coca.jpg",
     "nombre": "🥤 Refresco",
+    "categoria": "Bebida",
     "calorias": "200 kcal",
     "precio": "$1.99",
-    "ingredientes": ["Agua carbonatada", "Azúcar", "Saborizante natural"]
+    "ingredientes": ["Agua carbonatada", "Azúcar", "Saborizante natural"],
+    "descripcion": "Refrescante bebida carbonatada para acompañar tus comidas."
   }
 }
